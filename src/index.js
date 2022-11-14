@@ -1,17 +1,47 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import SeasonDisplay from "./SeasonDisplay";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const element = document.getElementById("root");
+const root = ReactDOM.createRoot(element);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// const App = () => {
+//   window.navigator.geolocation.getCurrentPosition(
+//     (position) => console.log(position),
+//     (err) => console.log(err)
+//   );
+
+//   return <div>Latitude: </div>;
+// };
+
+class App extends React.Component {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = { lat: null };
+  // }
+
+  state = { lat: null };
+
+  componentDidMount() {
+    console.log("componentDidMount - Updating geolocation");
+
+    window.navigator.geolocation.getCurrentPosition(
+      (position) => this.setState({ lat: position.coords.latitude }),
+      (err) => console.log(err)
+    );
+  }
+
+  componentDidUpdate() {
+    console.log("componentDidUpdate - ");
+  }
+
+  render() {
+    return (
+      <div>
+        <SeasonDisplay lat={this.state.lat} />
+      </div>
+    );
+  }
+}
+
+root.render(<App />, document.querySelector("#root"));
